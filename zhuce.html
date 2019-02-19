@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Flyme 账号-注册</title>
+	<link rel="stylesheet" type="text/css" href="css/zhuce.css">
+</head>
+<body>
+<div class="bd">
+<!-- header -->
+<div class="head">
+	<img src="img/denglu-logo.jpg" />		
+</div>
+<!-- banner -->
+	<div class="bann-box">
+		<div class="bann">
+			<div class="bg-box">
+				<div class="bg-box-min">
+					<div class="bg-box-top">
+						<a href="#">注册 Flyme 账号</a>
+					</div>
+					<div class="zhanghao zh">
+						<input type="text" placeholder="手机号码">
+						<span></span>
+					</div>
+					<div class="zhanghao mm">
+						<input type="text" placeholder="设置密码">
+						<span></span>
+					</div>
+					<div class="zhanghao yz">
+						<input class="yanzheng" type="text" placeholder="请输入验证码">
+						<span></span>
+					</div>
+
+					<div class="yanz">
+						点击获取
+					</div>
+					<div class="xieyi">
+						<a href="#" class="aa">点击立即注册，即表示您同意并愿意遵守</a>
+						<a href="#" class="bb"> Flyme服务协议</a>
+						<a href="#" class="aa">和</a>
+						<a href="#" class="bb">法律声明</a>
+					</div>
+				<div class="login-max">
+					<div>立即注册</div>
+				</div>
+				<div class="login-min">
+					<a href="#">登录</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- footer -->
+<div class="foot">
+	<div class="foot-t">
+		<div class="foot-t-q">
+			<a href="#">关于魅族</a>
+			<span></span>
+			<a href="#">工作机会</a>
+			<span></span>
+			<a href="#">联系我们</a>
+			<span></span>
+			<a href="#">法律声明</a>
+			<span></span>
+			<a href="#">常见问题</a>
+			<span></span>
+			<a href="#">简体中文</a>
+		</div>
+		<div class="foot-t-r">
+			<div class="foot-t-w">
+				<p>客服热线 &nbsp;400-788-3333</p>
+				<div class="zaix"><a href="#">在线客服</a></div>
+			</div>
+			<div class="foot-t-e">
+				<a href="#" class="imgg-q"></a>
+				<a href="#" class="imgg-w"><div class="weixin">
+					<img src="img/weixin.png" />
+				</div></a>
+				
+				<a href="#" class="imgg-e"></a>
+			</div>
+		</div>
+	</div>
+	<div class="foot-b">
+		<p>&copy;2019 Meizu Telecom Equipment Co.Ltd.All rights reserved.</p>
+		<a href="#">备案号：粤ICP13003602号-4</a>
+		<a href="#">经营许可证编号：粤B2-20130198</a>
+		<a href="#">营业执照</a>
+		<a href="#"><img src="img/ghs.png" /></a>
+		<p>粤公网安备 44049102496076号</p>
+	</div>
+</div>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript">
+$(".yanz").click(function(){
+	let str="1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+		let yzmStr="";
+		for(let i=0;i<4;i++){
+			var index=parseInt(Math.random()*str.length);
+			yzmStr+=str[index];
+		}
+		$(".yanz").html(yzmStr);
+});
+$(".yanzheng").blur(function(){
+	if($(".yanzheng").val().toLowerCase()!=($(".yanz").html()).toLowerCase()){
+			$(".yz span").html("验证码输入错误！");
+		}else{
+			$(".yz span").html("");
+		}
+});
+// 手机号验证
+$(".zh input").blur(function(){
+	let reg = /^1\d{10}$/;
+	if($(".zh input").val==""){
+		$(".zh span").html("请输入手机号！");
+	}else if(reg.test($(".zh input").val())){
+		$(".zh span").html("");
+	}else{
+		$(".zh span").html("请输入正确手机号！");
+	}
+});
+// 密码验证
+$(".mm input").blur(function(){
+		var reg=/^[\w\S]{6,12}$/;
+			if(reg.test($(".mm input").val())){
+				$(".mm span").html("√");
+			}else{
+				$(".mm span").html(" 密码由6-20位数字、字母、字符组合");
+		}
+	});
+// ajax交互
+$(".login-max").click(function(){
+		if($(".yanzheng").val()==""){
+			$(".yz span").html("验证码输入错误！");
+		}else if($(".mm input").val()==""){
+			$('.mm span').html("请再次输入密码！");
+		}else{
+			let xhr=new XMLHttpRequest();
+			xhr.open("get","php/reg.php?myphone="+$(".zh input").val()+"&passw="+$(".mm input").val(),true);
+			xhr.onreadystatechange=function(){
+				if(xhr.readyState==4&&xhr.status==200){
+					if(xhr.responseText==1){
+						alert("注册成功");
+						location.href="register.html";
+					}else if(xhr.responseText==0){
+						alert("注册失败");
+						
+					}else if(xhr.responseText==2){
+						alert("该用户已注册");	
+					}else if(xhr.responseText==3){
+						alert("请输入用户名或密码！");
+					}	
+				}
+			}
+			xhr.send();	
+		}
+	});
+</script>
